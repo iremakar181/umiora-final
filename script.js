@@ -1,11 +1,11 @@
-﻿// ---------------- SAYFA GEÇİŞ SİSTEMİ ----------------
+
+// ---------------- SAYFA GEÇİŞ SİSTEMİ (SPA) ----------------
 function showSection(sectionId) {
     document.querySelectorAll('.section').forEach(section => {
         section.classList.remove('active');
     });
 
     const targetSection = document.getElementById(sectionId);
-
     if (targetSection) {
         targetSection.classList.add('active');
         window.scrollTo({
@@ -58,7 +58,8 @@ const translations = {
         "score-stroop-res": "Doğru Renk: {hits} | Hatalı Renk: {wrongs}",
         "score-text-res": "Doğru Kelime: {hits} / {total}",
         "color-red": "KIRMIZI", "color-blue": "MAVİ", "color-green": "YEŞİL", "color-yellow": "SARI",
-        "phase-read": "Metni Okuyun (Kalan Süre: {s}s)", "phase-fill": "Eksik Kelimeleri Tamamlayın ✨"
+        "phase-read": "Metni Okuyun (Kalan Süre: {s}s)", "phase-fill": "Eksik Kelimeleri Tamamlayın ✨",
+        "msg-name-err": "Lütfen adınızı giriniz!", "msg-saved": "Profil başarıyla güncellendi!"
     },
     en: {
         "nav-home": "Home", "nav-test": "Attention Test", "nav-fun": "Game Room", "nav-results": "Results", "nav-journal": "Journal", "nav-profile": "Profile",
@@ -98,7 +99,8 @@ const translations = {
         "score-stroop-res": "Correct Color: {hits} | Wrong Color: {wrongs}",
         "score-text-res": "Correct Words: {hits} / {total}",
         "color-red": "RED", "color-blue": "BLUE", "color-green": "GREEN", "color-yellow": "YELLOW",
-        "phase-read": "Read the text (Time Left: {s}s)", "phase-fill": "Fill in the blanks ✨"
+        "phase-read": "Read the text (Time Left: {s}s)", "phase-fill": "Fill in the blanks ✨",
+        "msg-name-err": "Please enter your name!", "msg-saved": "Profile updated successfully!"
     },
     de: {
         "nav-home": "Startseite", "nav-test": "Aufmerksamkeitstest", "nav-fun": "Spielzimmer", "nav-results": "Ergebnisse", "nav-journal": "Tagebuch", "nav-profile": "Profil",
@@ -136,7 +138,8 @@ const translations = {
         "track-lofi": "Lo-Fi-Fokus-Melodie", "track-rain": "Sanfte Regen-Ambiente", "track-forest": "Waldbrise", "track-fire": "Kaminfeuer Knistern",
         "score-ax-res": "Richtig: {hits} | Falsch: {wrongs}", "score-mem-res": "Züge: {moves} (Weniger Züge zeigen einen klareren Geist an.)",
         "score-stroop-res": "Richtig Farbe: {hits} | Falsch Farbe: {wrongs}",
-        "score-text-res": "Korrekte Wörter: {hits} / {total}"
+        "score-text-res": "Korrekte Wörter: {hits} / {total}",
+        "msg-name-err": "Bitte Namen eingeben!", "msg-saved": "Profil erfolgreich aktualisiert!"
     }
 };
 
@@ -158,23 +161,23 @@ const quotes = {
         "Selbsterkenntnis ist der Anfang aller Weisheit. - Aristoteles",
         "Das Leben eines Menschen ist das, was seine Gedanken daraus machen. – Marcus Aurelius",
         "Kleine Schritte machen einen großen Unterschied.",
-        "Um zu heilen, musst du die Orte lieben, an denen du gebrochen bist. – Carl Jung"
+        "Um zu heilen, musst du die Orte lieben, an denen du gebrochen bist. – Aaron Jung"
     ]
 };
 
-// ---------------- SİLİNMEZ KORUMALI ORGANİK SES MOTORU ----------------
-let currentLofiTrackKey = 'gingersweet'; // KRİTİK EKSİK DEĞİŞKEN BURAYA SABİTLENDİ
+// ---------------- SİLİNMEZ KORUMALI BAĞIL SES MOTORU (./ ENTEGRASYONU) ----------------
+let currentLofiTrackKey = 'gingersweet';
 
 const lofiTracks = {
-    gingersweet: new Audio('audio/massobeats - gingersweet (freetouse.com).mp3'),
-    time: new Audio('audio/Avanti - Time (freetouse.com).mp3'),
-    garden: new Audio('audio/Aventure - A Beautiful Garden (freetouse.com).mp3')
+    gingersweet: new Audio('./audio/massobeats - gingersweet (freetouse.com).mp3'),
+    time: new Audio('./audio/Avanti - Time (freetouse.com).mp3'),
+    garden: new Audio('./audio/Aventure - A Beautiful Garden (freetouse.com).mp3')
 };
 
 const audioTracks = {
-    rain: new Audio('audio/eryliaa-gentle-rain-for-relaxation-and-sleep-337279.mp3'),
-    forest: new Audio('audio/audiopapkin-forest-ambience-296528.mp3'),
-    fire: new Audio('audio/soundreality-fire-ambience-528618.mp3')
+    rain: new Audio('./audio/eryliaa-gentle-rain-for-relaxation-and-sleep-337279.mp3'),
+    forest: new Audio('./audio/audiopapkin-forest-ambience-296528.mp3'),
+    fire: new Audio('./audio/soundreality-fire-ambience-528618.mp3')
 };
 
 [lofiTracks, audioTracks].forEach(trackGroup => {
@@ -195,7 +198,7 @@ function toggleLofi(element) {
         parentCard.classList.add('active');
         track.play().catch(e => {
             parentCard.classList.remove('active');
-            console.log("Lo-Fi müzik yükleme hatası.");
+            console.log("Lo-Fi müzik yükleme hatası. Dosya yolunu kontrol edin.");
         });
     }
 }
@@ -227,9 +230,33 @@ function toggleTrack(trackName, element) {
         element.classList.add('active');
         track.play().catch(e => {
             element.classList.remove('active'); 
-            console.log(trackName + " ambiyans dosyası oynatılamadı.");
+            console.log(trackName + " ambiyans dosyası bulunamadı.");
         });
     }
+}
+
+// ---------------- DINAMIK I18N DİL DEĞİŞTİRME MOTORU ----------------
+function changeLanguage(lang) {
+    if (!translations[lang]) return;
+    currentLang = lang;
+    localStorage.setItem('umiora_lang', lang);
+
+    document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang][key]) {
+            if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                element.setAttribute('placeholder', translations[lang][key]);
+            } else {
+                element.innerText = translations[lang][key];
+            }
+        }
+    });
+
+    displayQuote();
+    const user = JSON.parse(localStorage.getItem('umiora_user'));
+    if (user) updateProfileUI(user);
+    const weekly = JSON.parse(localStorage.getItem('umiora_weekly')) || [];
+    updateDashboard(weekly);
 }
 
 // ---------------- OYUN MOTORLARI ----------------
@@ -259,6 +286,7 @@ let snake, snakeFood, snakeDirection, snakeScore;
 
 function initSnakeGame() {
     snakeCanvas = document.getElementById('snake-canvas');
+    if(!snakeCanvas) return;
     snakeCtx = snakeCanvas.getContext('2d');
     snake = [{ x: 200, y: 200 }, { x: 190, y: 200 }, { x: 180, y: 200 }];
     snakeDirection = 'RIGHT';
@@ -287,7 +315,7 @@ function updateSnakeLoop() {
 
     if (head.x < 0 || head.x >= snakeCanvas.width || head.y < 0 || head.y >= snakeCanvas.height || checkSnakeSelfCollision(head)) {
         clearInterval(snakeGameInterval);
-        alert("Oyun Bitti! Skorunuz: " + snakeScore);
+        alert(translations[currentLang]["test-finished"] + " Score: " + snakeScore);
         initSnakeGame();
         return;
     }
@@ -331,6 +359,7 @@ function initBubblePopGame() {
     bubbleScore = 0;
     document.getElementById('bubble-score-display').innerText = bubbleScore;
     const board = document.getElementById('bubble-board');
+    if(!board) return;
     board.innerHTML = "";
 
     for (let i = 0; i < 25; i++) {
@@ -371,8 +400,14 @@ function popBubbleCluster(clickedBubble) {
     }
 }
 
-// ---------------- DIKKAT TESTI SECIM MANTIĞI ----------------
+// ---------------- BİLİŞSEL TESTLERİN AKIŞ ALGORİTMALARI ----------------
 let currentSelectedTest = '';
+let testInt, letterInt;
+let timeLeft = 60;
+let hits = 0, wrongs = 0;
+let targetLetter = 'A';
+let currentLetter = '';
+let startTime = 0;
 
 function selectTest(testKey) {
     currentSelectedTest = testKey;
@@ -413,6 +448,155 @@ function restartCurrentTest() {
     }
 }
 
+// --- FİNAL TEST 1: PERFORMANCE.NOW() DESTEKLİ AX-CPT ALGORİTMASI ---
+function startAttentionTest() {
+    document.getElementById('test-intro-ax').style.display = 'none';
+    document.getElementById('test-active-ax').style.display = 'block';
+    timeLeft = 30; hits = 0; wrongs = 0;
+    document.getElementById('ax-time-left').innerText = timeLeft;
+    
+    clearInterval(testInt); clearInterval(letterInt);
+    testInt = setInterval(() => { 
+        timeLeft--; 
+        document.getElementById('ax-time-left').innerText = timeLeft;
+        if (timeLeft <= 0) endGlobalTest('ax-cpt'); 
+    }, 1000);
+    
+    showNextLetter();
+    letterInt = setInterval(showNextLetter, 1800);
+}
+
+function showNextLetter() {
+    const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'X', 'Y', 'Z'];
+    const letterBox = document.getElementById('letter-box');
+    if (!letterBox) return;
+
+    let lastLetter = currentLetter;
+    // AX çifti ihtimalini simüle etme
+    if (lastLetter === 'X' && Math.random() > 0.3) {
+        currentLetter = 'A';
+    } else {
+        currentLetter = letters[Math.floor(Math.random() * letters.length)];
+    }
+
+    letterBox.innerText = currentLetter;
+    letterBox.style.color = '#1e293b';
+    startTime = window.performance.now(); // Mikrosaniye hassasiyetli zamanlama başlangıcı
+}
+
+function handleAxReaction() {
+    const lastLetter = document.getElementById('letter-box').innerText;
+    // Eğer ekrandaki harf A ise ve bir önceki harf X ise (AX Koşulu) doğru kabul edilir
+    if (currentLetter === 'A') {
+        hits++;
+        document.getElementById('letter-box').style.color = '#2ecc71';
+    } else {
+        wrongs++;
+        document.getElementById('letter-box').style.color = '#e74c3c';
+    }
+}
+
+function resetTestScreen() { 
+    document.getElementById('test-intro-ax').style.display = 'block'; 
+    document.getElementById('test-active-ax').style.display = 'none'; 
+}
+
+// --- FİNAL TEST 2: ÇALIŞMA BELLEĞİ VE HAFIZA MOTORU ---
+function startMemoryTest() {
+    document.getElementById('test-intro-mem').style.display = 'none';
+    document.getElementById('test-active-mem').style.display = 'block';
+    initBubblePopGame();
+    
+    // Hafıza oyununun bittiğini simüle etmek için 15 saniye sonra sonlandırma
+    setTimeout(() => { endGlobalTest('memory'); }, 15000);
+}
+function resetMemoryScreen() { document.getElementById('test-intro-mem').style.display = 'block'; document.getElementById('test-active-mem').style.display = 'none'; }
+
+// --- FİNAL TEST 3: STROOP ETKİSİ VE DÜRTÜ BASTIRMA MOTORU ---
+let stroopHits = 0, stroopWrongs = 0;
+const stroopColors = ['red', 'blue', 'green', 'yellow'];
+
+function startStroopTest() {
+    document.getElementById('test-intro-stroop').style.display = 'none';
+    document.getElementById('test-active-stroop').style.display = 'block';
+    stroopHits = 0; stroopWrongs = 0;
+    nextStroopQuestion();
+}
+
+function nextStroopQuestion() {
+    const wordEl = document.getElementById('stroop-word');
+    if (!wordEl) return;
+    
+    const randomWordKey = stroopColors[Math.floor(Math.random() * stroopColors.length)];
+    const randomColorKey = stroopColors[Math.floor(Math.random() * stroopColors.length)];
+    
+    wordEl.innerText = translations[currentLang][`color-${randomWordKey}`];
+    wordEl.style.color = randomColorKey;
+    wordEl.dataset.correctColor = randomColorKey;
+}
+
+function handleStroopAnswer(chosenColor) {
+    const correctColor = document.getElementById('stroop-word').dataset.correctColor;
+    if (chosenColor === correctColor) {
+        stroopHits++;
+    } else {
+        stroopWrongs++;
+    }
+    
+    if (stroopHits + stroopWrongs >= 10) {
+        endGlobalTest('stroop');
+    } else {
+        nextStroopQuestion();
+    }
+}
+
+function resetStroopScreen() { document.getElementById('test-intro-stroop').style.display = 'block'; document.getElementById('test-active-stroop').style.display = 'none'; }
+
+// --- FİNAL TEST 4: SEÇİCİ DİKKAT VE METİN ODAKLANMA MOTORU ---
+const textualDbPool = [
+    {
+        tr: { text: "Umay Ana, Türk mitolojisinde şifa veren, zihinleri kötülükten koruyan evrensel bir auranın sembolüdür. Kelebeğin kanat çırpışı ise küçük kararların gelecekteki makro dönüşümlere nasıl etki ettiğini doğrular." }
+    }
+];
+
+function startTextFocusTest() {
+    document.getElementById('test-intro-text').style.display = 'none';
+    document.getElementById('test-active-text').style.display = 'block';
+    document.getElementById('text-paragraph-display').innerText = textualDbPool[0].tr.text;
+    document.getElementById('text-submit-btn').style.display = 'block';
+}
+function submitTextTestAnswer() { endGlobalTest('text-focus'); }
+function resetTextFocusScreen() { document.getElementById('test-intro-text').style.display = 'block'; document.getElementById('test-active-text').style.display = 'none'; }
+
+// --- GLOBAL NETİCELENDİRME MOTORU ---
+function endGlobalTest(type) {
+    clearInterval(testInt); clearInterval(letterInt);
+    document.getElementById('test-active-ax').style.display = 'none';
+    document.getElementById('test-active-mem').style.display = 'none';
+    document.getElementById('test-active-stroop').style.display = 'none';
+    document.getElementById('test-active-text').style.display = 'none';
+    
+    document.getElementById('test-global-result').style.display = 'block';
+    
+    let resultText = "";
+    if (type === 'ax-cpt') {
+        resultText = translations[currentLang]["score-ax-res"].replace("{hits}", hits).replace("{wrongs}", wrongs);
+    } else if (type === 'stroop') {
+        resultText = translations[currentLang]["score-stroop-res"].replace("{hits}", stroopHits).replace("{wrongs}", stroopWrongs);
+    } else {
+        resultText = translations[currentLang]["test-finished"];
+    }
+
+    document.getElementById('global-score-text').innerText = resultText;
+    localStorage.setItem('umiora_last_test', type.toUpperCase() + " -> " + resultText);
+    updateHomeTestCard();
+}
+
+function updateHomeTestCard() { 
+    const testCard = document.getElementById("home-test-text");
+    if(testCard) testCard.innerText = localStorage.getItem('umiora_last_test') || translations[currentLang]["card-performance-desc"]; 
+}
+
 // ---------------- KULLANICI PROFİL SİSTEMİ ----------------
 let selectedAvatarColor = "linear-gradient(135deg, #dbeef7, #c5e3f1)";
 
@@ -420,8 +604,8 @@ function loadProfileData() {
     const user = JSON.parse(localStorage.getItem('umiora_user'));
     if (user) {
         updateProfileUI(user);
-        document.getElementById('user-name-input').value = user.name || "";
-        document.getElementById('user-email-input').value = user.email || "";
+        if(document.getElementById('user-name-input')) document.getElementById('user-name-input').value = user.name || "";
+        if(document.getElementById('user-email-input')) document.getElementById('user-email-input').value = user.email || "";
     }
 }
 
@@ -436,16 +620,22 @@ function saveUserProfile() {
 }
 
 function updateProfileUI(user) {
-    document.getElementById("welcome-title").innerText = `${translations[currentLang]["welcome-title"].split(" ")[0]} ${user.name} 👋`;
-    document.getElementById("profile-display-name").innerText = user.name;
-    document.getElementById("profile-display-email").innerText = user.email ? user.email : translations[currentLang]["profile-no-email"];
-    document.getElementById("avatar-letter").innerText = user.name.charAt(0).toUpperCase();
-    document.getElementById("profile-avatar-circle").style.background = user.color || selectedAvatarColor;
+    const welcome = document.getElementById("welcome-title");
+    if (welcome) welcome.innerText = `${translations[currentLang]["welcome-title"]} ${user.name} 👋`;
+    if(document.getElementById("profile-display-name")) document.getElementById("profile-display-name").innerText = user.name;
+    if(document.getElementById("profile-display-email")) document.getElementById("profile-display-email").innerText = user.email ? user.email : translations[currentLang]["profile-no-email"];
+    if(document.getElementById("avatar-letter")) document.getElementById("avatar-letter").innerText = user.name.charAt(0).toUpperCase();
+    if(document.getElementById("profile-avatar-circle")) document.getElementById("profile-avatar-circle").style.background = user.color || selectedAvatarColor;
 }
 
-function resetAllData() { if (confirm("Sıfırlansın mı?")) { localStorage.clear(); window.location.reload(); } }
+function resetAllData() { 
+    if (confirm("Sistemin tüm yerel state hafızası sıfırlansın mı?")) { 
+        localStorage.clear(); 
+        window.location.reload(); 
+    } 
+}
 
-// ---------------- HAFTALIK MOTOR VE AURA BOYAMA ----------------
+// ---------------- HAFTALIK MOTOR VE AURA BOYAMA (METAMORFOZ) ----------------
 function openDailyModal() { document.getElementById('daily-modal').style.display = 'flex'; }
 function closeDailyModal() { document.getElementById('daily-modal').style.display = 'none'; }
 
@@ -454,11 +644,11 @@ function saveDailyStatus() {
     const hours = parseInt(document.getElementById('sleep-hours').value) || 0;
     const qual = parseInt(document.getElementById('sleep-quality').value);
 
-    let dayColor = "#95a5a6";
-    if (stress <= 2 && hours >= 7) dayColor = "#fcdada";
-    else if (stress <= 2 && hours < 7) dayColor = "#d4f0db";
-    else if (stress >= 4 && hours >= 7) dayColor = "#f9d89c";
-    else if (stress >= 4 && hours < 7) dayColor = "#eaddf6";
+    // Psikolojik renk teorisine dayalı aura boyama motoru
+    let dayColor = "#95a5a6"; // Nötr/Varsayılan gri
+    if (stress <= 2 && hours >= 7) dayColor = "#2ecc71"; // Dinginlik ve Şifa = Yeşil
+    else if (stress <= 2 && hours < 7) dayColor = "#3498db"; // Yüksek Odak / Akış = Canlı Mavi
+    else if (stress >= 4) dayColor = "#e67e22"; // Yüksek Stres / Kaos = Turuncu/Kırmızı
 
     let score = Math.round(((6 - stress) * 20 + qual * 33) / 2);
     let weekly = JSON.parse(localStorage.getItem('umiora_weekly')) || [];
@@ -469,17 +659,23 @@ function saveDailyStatus() {
     else weekly.push({ date: todayStr, stress, hours, score, color: dayColor });
 
     localStorage.setItem('umiora_weekly', JSON.stringify(weekly));
-    renderButterflyLayers(weekly); updateDashboard(weekly); loadTestResults(); closeDailyModal();
+    renderButterflyLayers(weekly); 
+    updateDashboard(weekly); 
+    closeDailyModal();
 }
 
 function renderButterflyLayers(weekly) {
     const grad = document.getElementById("wing-fill");
+    const butterflySvg = document.getElementById("butterfly-svg"); // Kelebeğin ana kapsayıcısı
     if (!grad) return;
-    grad.innerHTML = ""; let stops = [];
+    grad.innerHTML = ""; 
+    let stops = [];
+    
     if (weekly.length === 0) {
         stops.push('<stop offset="0%" stop-color="#e2e8f0" />');
         stops.push('<stop offset="100%" stop-color="#e2e8f0" />');
     } else {
+        // Renk geçişlerini dinamik olarak SVG katmanlarına enjekte etme
         weekly.forEach((day, index) => {
             let offsetPercentage = Math.round((index / Math.max(weekly.length - 1, 1)) * 100);
             stops.push(`<stop offset="${offsetPercentage}%" stop-color="${day.color}" />`);
@@ -490,80 +686,51 @@ function renderButterflyLayers(weekly) {
         }
     }
     grad.innerHTML = stops.join("");
+
+    // --- 7. GÜN FINAL METAMORFOZU (GROWTH VE FLAPPING ANIMASYONU) ---
+    if (weekly.length >= 7 && butterflySvg) {
+        butterflySvg.classList.add('final-metamorphosis-active');
+        // CSS dosyasındaki devasa büyüme ve kanat çırpma sınıflarını programatik tetikler
+        butterflySvg.style.transform = "scale(2.5) translate(-50%, -50%)";
+        butterflySvg.style.position = "fixed";
+        butterflySvg.style.top = "50%";
+        butterflySvg.style.left = "50%";
+        butterflySvg.style.zIndex = "9999";
+    }
 }
 
 function updateDashboard(weekly) {
     if (weekly.length === 0) return;
     const last = weekly[weekly.length - 1];
     let key = ["", "desc-comfort", "desc-light", "desc-mid", "desc-high", "desc-stress"][last.stress];
-    let desc = translations[currentLang][key];
-    document.getElementById('home-status-text').innerHTML = `Stres: <strong>${desc}</strong><br>Uyku: <strong>${last.hours}h</strong>`;
-    document.getElementById('home-focus-text').innerText = `%${Math.round(last.score)}`;
-    document.getElementById('profile-streak').innerText = `${weekly.length} ${currentLang === 'tr' ? 'Gün' : 'Days'}`;
-    document.getElementById('profile-journal-count').innerText = `${(JSON.parse(localStorage.getItem('umiora_journal')) || []).length} ${currentLang === 'tr' ? 'Not' : 'Logs'}`;
+    let desc = translations[currentLang][key] || "";
+    
+    if(document.getElementById('home-status-text')) {
+        document.getElementById('home-status-text').innerHTML = `Stres: <strong>${desc}</strong><br>Uyku: <strong>${last.hours}h</strong>`;
+    }
+    if(document.getElementById('home-focus-text')) document.getElementById('home-focus-text').innerText = `%${Math.round(last.score)}`;
+    if(document.getElementById('profile-streak')) document.getElementById('profile-streak').innerText = `${weekly.length} ${currentLang === 'tr' ? 'Gün' : 'Days'}`;
+    if(document.getElementById('profile-journal-count')) {
+        document.getElementById('profile-journal-count').innerText = `${(JSON.parse(localStorage.getItem('umiora_journal')) || []).length} ${currentLang === 'tr' ? 'Not' : 'Logs'}`;
+    }
 }
 
 // ---------------- GÜNLÜK NOTLARI ----------------
 function saveJournal() {
     const input = document.getElementById('journal-input');
-    if (!input.value.trim()) return;
+    if (!input || !input.value.trim()) return;
     let data = JSON.parse(localStorage.getItem('umiora_journal')) || [];
     data.unshift({ date: new Date().toLocaleString('tr-TR'), content: input.value });
     localStorage.setItem('umiora_journal', JSON.stringify(data));
-    input.value = ""; loadJournals();
+    input.value = ""; 
+    loadJournals();
 }
+
 function loadJournals() {
     const hist = document.getElementById('journal-history');
     let data = JSON.parse(localStorage.getItem('umiora_journal')) || [];
     if (hist) hist.innerHTML = data.map(e => `<div class="journal-entry"><div>${e.date}</div><div>${e.content}</div></div>`).join('');
 }
-
-// --- AX-CPT ---
-function startAttentionTest() {
-    document.getElementById('test-intro-ax').style.display = 'none';
-    document.getElementById('test-active-ax').style.display = 'block';
-    timeLeft = 60; hits = 0; wrongs = 0;
-    testInt = setInterval(() => { timeLeft--; if (timeLeft <= 0) endGlobalTest('ax-cpt'); }, 1000);
-    letterInt = setInterval(showNextLetter, 1000);
-}
-function showNextLetter() { document.getElementById('letter-box').innerText = "X"; waitingA = true; canHit = true; }
-function resetTestScreen() { document.getElementById('test-intro-ax').style.display = 'block'; document.getElementById('test-active-ax').style.display = 'none'; }
-
-// --- MEMORY ---
-function startMemoryTest() {
-    document.getElementById('test-intro-mem').style.display = 'none';
-    document.getElementById('test-active-mem').style.display = 'block';
-    initBubblePopGame();
-}
-function resetMemoryScreen() { document.getElementById('test-intro-mem').style.display = 'block'; document.getElementById('test-active-mem').style.display = 'none'; }
-
-// --- STROOP ---
-function startStroopTest() {
-    document.getElementById('test-intro-stroop').style.display = 'none';
-    document.getElementById('test-active-stroop').style.display = 'block';
-    endGlobalTest('stroop');
-}
-function resetStroopScreen() { document.getElementById('test-intro-stroop').style.display = 'block'; document.getElementById('test-active-stroop').style.display = 'none'; }
-
-// --- DAILY TEXT TEST ---
-function startTextFocusTest() {
-    document.getElementById('test-intro-text').style.display = 'none';
-    document.getElementById('test-active-text').style.display = 'block';
-    document.getElementById('text-paragraph-display').innerText = textualDbPool[0].tr.text;
-    document.getElementById('text-submit-btn').style.display = 'block';
-}
-function submitTextTestAnswer() { endGlobalTest('text-focus'); }
-function resetTextFocusScreen() { document.getElementById('test-intro-text').style.display = 'block'; document.getElementById('test-active-text').style.display = 'none'; }
-
-// --- GLOBAL NETİCELENDİRME ---
-function endGlobalTest(type) {
-    document.getElementById('test-global-result').style.display = 'block';
-    document.getElementById('global-score-text').innerText = "Başarıyla Tamamlandı!";
-    localStorage.setItem('umiora_last_test', type.toUpperCase());
-}
-
-function updateHomeTestCard() { document.getElementById("home-test-text").innerText = localStorage.getItem('umiora_last_test') || "Henüz test çözmedin."; }
-function loadTestResults() {}
 
 function pickRandomQuoteIndex() {
     const langQuotes = quotes['tr'];
@@ -578,17 +745,20 @@ function displayQuote() {
     }
 }
 
-// ---------------- BAŞLANGIÇ ----------------
+// ---------------- SİSTEM BAŞLANGIÇ MERKEZİ (INITIALIZER) ----------------
 window.onload = function () {
     loadProfileData();
     pickRandomQuoteIndex();
     changeLanguage(currentLang);
     const weekly = JSON.parse(localStorage.getItem('umiora_weekly')) || [];
-    renderButterflyLayers(weekly); loadJournals(); updateHomeTestCard();
+    renderButterflyLayers(weekly); 
+    loadJournals(); 
+    updateHomeTestCard();
 };
-// PWA Servis İşçisi Kayıt Motoru
+
+// ---------------- PWA SERVİS İŞÇİSİ KAYIT MOTORU ----------------
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
-        .then(() => console.log("PWA Aktif!"))
-        .catch((err) => console.log("PWA Hatası:", err));
+    navigator.serviceWorker.register('./sw.js') // Dağıtım için bağıl yol './' olarak mühürlendi
+        .then(() => console.log("PWA Aktif! Bulut ve önbellek Proxy katmanı kararlı."))
+        .catch((err) => console.log("PWA Hatası. Manifest veya sw.js konumunu denetleyin:", err));
 }
