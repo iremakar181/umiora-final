@@ -1,0 +1,619 @@
+/* ---------------- GENEL AYARLAR ---------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #eef7fb, #f6f9fc, #edf8f3);
+    color: #2f3e46;
+    min-height: 100vh;
+}
+
+/* ---------------- NAVBAR ---------------- */
+.navbar {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(180, 200, 220, 0.3);
+    padding: 18px 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #4a7fa7;
+    letter-spacing: 0.5px;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-btn {
+    background: #dbeef7;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #355c7d;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+    .nav-btn:hover {
+        background: #c5e3f1;
+        transform: translateY(-2px);
+    }
+
+/* ---------------- D�L SE��C� PANEL ---------------- */
+.lang-selector {
+    display: flex;
+    gap: 5px;
+    margin-left: 10px;
+}
+
+.lang-btn {
+    background: none;
+    border: 1px solid #4a7fa7;
+    color: #4a7fa7;
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.8rem;
+    transition: 0.3s ease;
+}
+
+    .lang-btn:hover, .lang-btn.active {
+        background: #4a7fa7;
+        color: white;
+    }
+
+/* ---------------- ANA ��ER�K ---------------- */
+.main-content {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* ---------------- B�L�MLER ---------------- */
+.section {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+    .section.active {
+        display: block;
+    }
+
+    .section h1 {
+        font-size: 2.3rem;
+        margin-bottom: 10px;
+        color: #355c7d;
+    }
+
+.subtitle {
+    font-size: 1.05rem;
+    color: #607d8b;
+    margin-bottom: 30px;
+}
+
+/* ---------------- KARTLAR ---------------- */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 22px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(10px);
+    border-radius: 22px;
+    padding: 24px;
+    box-shadow: 0 10px 25px rgba(100, 130, 160, 0.08);
+    border: 1px solid rgba(200, 220, 230, 0.35);
+    transition: 0.3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 30px rgba(100, 130, 160, 0.12);
+    }
+
+    .card h3 {
+        margin-bottom: 12px;
+        color: #4a6f91;
+        font-size: 1.2rem;
+    }
+
+    .card p {
+        color: #4e5d66;
+        line-height: 1.6;
+        font-size: 1rem;
+    }
+
+.test-select-card {
+    text-align: center;
+    cursor: pointer;
+    padding: 35px 20px;
+}
+
+.test-card-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+/* ---------------- BUTONLAR ---------------- */
+.main-btn {
+    background: linear-gradient(135deg, #7fc8c9, #7ba7d8);
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 16px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: 0.3s ease;
+    box-shadow: 0 8px 18px rgba(123, 167, 216, 0.22);
+}
+
+    .main-btn:hover {
+        transform: translateY(-2px);
+        opacity: 0.95;
+    }
+
+/* ---------------- TEXTAREA & INPUTLAR ---------------- */
+textarea {
+    width: 100%;
+    border: 1px solid #d5e6ec;
+    border-radius: 18px;
+    padding: 18px;
+    font-size: 1rem;
+    resize: none;
+    outline: none;
+    background: #fcfeff;
+    color: #2f3e46;
+    transition: 0.3s ease;
+}
+
+    textarea:focus {
+        border-color: #9ac7db;
+        box-shadow: 0 0 0 4px rgba(154, 199, 219, 0.18);
+    }
+
+input, select {
+    width: 100%;
+    padding: 12px 14px;
+    margin-top: 8px;
+    margin-bottom: 18px;
+    border: 1px solid #d4e2ea;
+    border-radius: 14px;
+    font-size: 1rem;
+    outline: none;
+    background: #fcfeff;
+    transition: 0.3s ease;
+}
+
+    input:focus, select:focus {
+        border-color: #9ac7db;
+        box-shadow: 0 0 0 4px rgba(154, 199, 219, 0.18);
+    }
+
+/* ---------------- TEST MOTORLARI ST�LLER� ---------------- */
+#letter-box {
+    width: 180px;
+    height: 180px;
+    margin: 25px auto;
+    background: #f1f5f9;
+    border-radius: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    font-weight: 800;
+    color: #355c7d;
+}
+
+#reaction-btn {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: none;
+    background: #ff6b6b;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+}
+
+.memory-game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 80px);
+    gap: 15px;
+    justify-content: center;
+    margin: 25px auto;
+    max-width: 400px;
+}
+
+.memory-card {
+    height: 80px;
+    background: linear-gradient(135deg, #7ba7d8, #355c7d);
+    border-radius: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: transparent;
+    user-select: none;
+    transition: transform 0.4s ease, background 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+    .memory-card.flipped {
+        background: #ffffff;
+        border: 2px solid #7ba7d8;
+        color: initial;
+        transform: rotateY(180deg);
+    }
+
+    .memory-card.matched {
+        background: #e6f4ea;
+        border: 2px solid #27ae60;
+        color: initial;
+        cursor: default;
+        pointer-events: none;
+    }
+
+#stroop-word-box {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin: 30px auto;
+    letter-spacing: 1px;
+    min-height: 80px;
+}
+
+#stroop-options-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(140px, 180px));
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.stroop-btn {
+    background: #ffffff;
+    border: 2px solid #d4e2ea;
+    padding: 14px 20px;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #355c7d;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+    .stroop-btn:hover {
+        border-color: #7ba7d8;
+        background: #f8fbfd;
+        transform: translateY(-2px);
+    }
+
+#text-paragraph-display {
+    background: #fcfeff;
+    border: 1px solid #eef4f8;
+    padding: 25px;
+    border-radius: 18px;
+    font-size: 1.25rem;
+    line-height: 2;
+    color: #374151;
+    text-align: justify;
+    max-width: 650px;
+    margin: 20px auto;
+}
+
+.stroop-blank-input {
+    display: inline-block;
+    width: 120px !important;
+    padding: 2px 8px !important;
+    margin: 0 5px !important;
+    border-radius: 8px !important;
+    border: 2px solid #7ba7d8 !important;
+    font-size: 1.1rem !important;
+    font-weight: bold !important;
+    color: #355c7d !important;
+    text-align: center !important;
+    background: #f0f7fc !important;
+}
+
+/* ---------------- AN�MASYONLAR ---------------- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---------------- MODAL ---------------- */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(47, 62, 70, 0.6);
+    backdrop-filter: blur(6px);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 24px;
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+}
+
+/* ---------------- KELEBEK F�Z��� ---------------- */
+.butterfly-container {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    z-index: 1500;
+    filter: drop-shadow(0px 10px 25px rgba(53, 92, 125, 0.22));
+    transition: all 2s cubic-bezier(0.25, 1, 0.5, 1);
+    cursor: pointer;
+}
+
+    .butterfly-container:not(.celebrate):hover {
+        transform: scale(1.08) rotate(-3deg);
+    }
+
+#butterfly-svg {
+    animation: float_anim 4s ease-in-out infinite;
+}
+
+.wing {
+    transform-origin: 100px 100px;
+    transition: fill 1s ease;
+}
+
+.upper-left, .lower-left {
+    animation: flap-l 0.8s ease-in-out infinite;
+}
+
+.upper-right, .lower-right {
+    animation: flap-r 0.8s ease-in-out infinite;
+}
+
+@keyframes flap-l {
+    0%, 100% {
+        transform: scaleX(1);
+    }
+
+    50% {
+        transform: scaleX(0.2);
+    }
+}
+
+@keyframes flap-r {
+    0%, 100% {
+        transform: scaleX(1);
+    }
+
+    50% {
+        transform: scaleX(0.2);
+    }
+}
+
+@keyframes float_anim {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateY(-18px) rotate(3deg);
+        opacity: 1;
+    }
+}
+
+.butterfly-container.celebrate {
+    bottom: 50% !important;
+    right: 50% !important;
+    transform: translate(50%, 50%) scale(2.5) !important;
+}
+
+/* ---------------- PROF�L SAYFASI ---------------- */
+.profile-main-card {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.avatar-circle {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #dbeef7, #c5e3f1);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid white;
+    box-shadow: 0 5px 15px rgba(100, 130, 160, 0.15);
+    transition: background 0.5s ease;
+}
+
+.form-group {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+    .form-group label {
+        display: block;
+        font-size: 0.9rem;
+        color: #607d8b;
+        font-weight: 600;
+        margin-bottom: 5px;
+        margin-left: 5px;
+    }
+
+.color-palette {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    justify-content: center;
+}
+
+.color-swatch {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.3s ease;
+}
+
+    .color-swatch.selected {
+        border: 2px solid #355c7d;
+        transform: scale(1.15);
+    }
+
+.profile-stats-subgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.stat-box {
+    background: rgba(246, 249, 252, 0.8);
+    padding: 15px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgba(200, 220, 230, 0.2);
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #355c7d;
+}
+
+/* ---------------- SES �STASYONU D�ZEN� ---------------- */
+.soundscape-container {
+    margin-top: 40px;
+    animation: fadeIn 0.8s ease;
+}
+
+.soundscape-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 22px;
+}
+
+.sound-toggle-btn {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(200, 220, 230, 0.4);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.03);
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    text-align: left;
+}
+
+    .sound-toggle-btn.active {
+        background: linear-gradient(135deg, #f0f7fc, #e1f0fa);
+        border-color: #7ba7d8;
+        box-shadow: 0 8px 22px rgba(123, 167, 216, 0.2);
+    }
+
+.sound-icon {
+    font-size: 1.8rem;
+}
+
+.sound-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #355c7d;
+}
+
+.sound-info-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+    .sound-info-block select {
+        padding: 4px 8px;
+        margin-top: 4px;
+        margin-bottom: 0;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid #d4e2ea;
+        color: #355c7d;
+        width: 100%;
+    }
+
+@media (max-width: 768px) {
+    .profile-stats-subgrid {
+        grid-template-columns: 1fr;
+    }
+
+    .butterfly-container {
+        bottom: 30px;
+        right: 30px;
+        transform: scale(0.7);
+    }
+
+    .soundscape-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .memory-game-board {
+        grid-template-columns: repeat(4, 70px);
+    }
+
+    .memory-card {
+        height: 70px;
+    }
+
+    #stroop-options-container {
+        grid-template-columns: 1fr;
+        width: 100%;
+        max-width: 250px;
+        margin: 20px auto 0;
+    }
+}

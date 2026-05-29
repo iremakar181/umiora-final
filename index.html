@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UMIORA | Zihinsel Farkındalık ve Odak Takibi</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">UMIORA</div>
+    <nav>
+      <button class="nav-btn" onclick="showSection('home')" data-i18n="nav-home">Ana Sayfa</button>
+      <button class="nav-btn" onclick="showSection('test-center')" data-i18n="nav-test">Dikkat Testi</button>
+      <button class="nav-btn" onclick="showSection('fun-zone')" data-i18n="nav-fun">Oyun Odası</button>
+      <button class="nav-btn" onclick="showSection('results')" data-i18n="nav-results">Sonuçlarım</button>
+      <button class="nav-btn" onclick="showSection('journal')" data-i18n="nav-journal">Günlüğüm</button>
+      <button class="nav-btn" onclick="showSection('profile')" data-i18n="nav-profile">Profilim</button>
+      
+      <div class="lang-selector">
+        <button class="lang-btn active" id="btn-lang-tr" onclick="changeLanguage('tr')">TR</button>
+        <button class="lang-btn" id="btn-lang-en" onclick="changeLanguage('en')">EN</button>
+        <button class="lang-btn" id="btn-lang-de" onclick="changeLanguage('de')">DE</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main-content">
+
+    <section id="home" class="section active">
+      <h1 id="welcome-title" data-i18n="welcome-title">Hoş Geldin 👋</h1>
+      <p class="subtitle" data-i18n="home-subtitle">Bugünkü zihinsel durumunu takip etmeye hazır mısın?</p>
+
+      <div class="card-grid">
+        <div class="card" style="cursor: pointer;" onclick="openDailyModal()">
+          <h3 data-i18n="card-status-title">Zihinsel Durumun</h3>
+          <p id="home-status-text" data-i18n="card-status-desc">Stres ve uyku verini girmek için tıkla.</p>
+        </div>
+
+        <div class="card">
+          <h3 data-i18n="card-focus-title">Odak Beklentisi</h3>
+          <p id="home-focus-text" style="font-size: 1.5rem; font-weight: 600; color: #a3b8cc; margin-top: 5px;" data-i18n="status-waiting">✨ Bekleniyor</p>
+          <p id="home-focus-desc" style="font-size: 0.9rem; margin-top: 8px; color: #8fa6b8;" data-i18n="status-waiting-desc">Analiz için durumunu gir.</p>
+        </div>
+
+        <div class="card">
+          <h3 data-i18n="card-performance-title">Son Performans</h3>
+          <p id="home-test-text" data-i18n="card-performance-desc">Henüz test çözmedin.</p>
+        </div>
+
+        <div class="card">
+          <h3 data-i18n="card-quote-title">Bugünün Sözü</h3>
+          <p id="quote-text">"Kendini tanımak, tüm bilgeliğin başlangıcıdır."</p>
+        </div>
+      </div>
+
+      <div class="soundscape-container">
+        <h2 data-i18n="soundscape-title">Zihinsel Odak & Gevşeme İstasyonu</h2>
+        <p class="subtitle" style="margin-bottom: 25px;" data-i18n="soundscape-subtitle">Sakinleşmek veya odaklanmak için kendi psikoakustik ortamını tasarla.</p>
+        
+        <div class="soundscape-grid">
+          
+          <div class="sound-toggle-btn lofi-panel-card" id="lofi-parent-card">
+            <span class="sound-icon" onclick="toggleLofi(this)">🎵</span>
+            <div class="sound-info-block">
+              <span class="sound-name" data-i18n="track-lofi" onclick="toggleLofi(this)">Lo-Fi Odak Müziği</span>
+              <select id="lofi-track-select" onchange="changeLofiTrack(this)" onclick="event.stopPropagation()">
+                <option value="gingersweet">Gingersweet - Massobeats</option>
+                <option value="time">Time - Avanti</option>
+                <option value="garden">A Beautiful Garden - Aventure</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="sound-toggle-btn" onclick="toggleTrack('rain', this)">
+            <span class="sound-icon">🌧️</span>
+            <span class="sound-name" data-i18n="track-rain">Hafif Yağmur Ambiyansı</span>
+          </button>
+
+          <button class="sound-toggle-btn" onclick="toggleTrack('forest', this)">
+            <span class="sound-icon">🌲</span>
+            <span class="sound-name" data-i18n="track-forest">Orman Esintisi</span>
+          </button>
+
+          <button class="sound-toggle-btn" onclick="toggleTrack('fire', this)">
+            <span class="sound-icon">🔥</span>
+            <span class="sound-name" data-i18n="track-fire">Ateş Çıtırtısı</span>
+          </button>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="test-center" class="section">
+      <h1 style="color: #355c7d;" data-i18n="test-title">Bilişsel Test Merkezi</h1>
+      <p class="subtitle" data-i18n="test-subtitle">Zihinsel performansını ve odak esnekliğini ölçen psikolojik testler.</p>
+      
+      <div class="card-grid" id="test-menu-grid">
+        <div class="card test-select-card" onclick="selectTest('ax-cpt')">
+          <div class="test-card-icon">🎯</div>
+          <h3 data-i18n="menu-ax-title">AX-CPT Dikkat Testi</h3>
+          <p data-i18n="menu-ax-desc">Sürdürülebilir odaklanma ve dürtü kontrolünü ölçer.</p>
+        </div>
+        <div class="card test-select-card" onclick="selectTest('memory')">
+          <div class="test-card-icon">🧩</div>
+          <h3 data-i18n="menu-mem-title">Çalışma Belleği Testi</h3>
+          <p data-i18n="menu-mem-desc">Anlık hafıza tutumu ve zihinsel dağınıklığı analiz eder.</p>
+        </div>
+        <div class="card test-select-card" onclick="selectTest('stroop')">
+          <div class="test-card-icon">🎨</div>
+          <h3 data-i18n="menu-stroop-title">Renk Çatışma Testi</h3>
+          <p data-i18n="menu-stroop-desc">Beynin dürtü bastırma ve irade tüketimini ölçer.</p>
+        </div>
+        <div class="card test-select-card" onclick="selectTest('text-focus')">
+          <div class="test-card-icon">📖</div>
+          <h3 data-i18n="menu-text-title">Metin Odaklanma Testi</h3>
+          <p data-i18n="menu-text-desc">Yüksek süzme kabiliyetini ve seçici dikkati ölçer.</p>
+        </div>
+      </div>
+
+      <div class="card" id="test-arena-card" style="display: none; text-align: center; padding: 40px 20px; margin-top: 25px;">
+        <button class="nav-btn" style="float: left; margin-bottom: 20px;" onclick="backToTestMenu()" data-i18n="btn-back">⬅ Geri Dön</button>
+        <div style="clear: both;"></div>
+
+        <div id="arena-ax-cpt" style="display: none;">
+          <div id="test-intro-ax">
+            <h3 data-i18n="test-how-title">Nasıl Çalışır?</h3>
+            <p style="margin: 20px 0; color: #607d8b;" data-i18n="test-how-desc">Ekranda harfler belirecek. Sadece X'ten sonra A gelirse butona basın.</p>
+            <button class="main-btn" onclick="startAttentionTest()" data-i18n="btn-start-test">Teste Başla</button>
+          </div>
+          <div id="test-active-ax" style="display: none;">
+            <div id="letter-box">-</div>
+            <button id="reaction-btn" onclick="handleReaction()" data-i18n="btn-reaction">TEPKİ VER!</button>
+            <p id="test-timer-ax" style="margin-top: 20px; font-weight: bold;"><span data-i18n="test-time-left">Kalan Süre</span>: 60s</p>
+          </div>
+        </div>
+
+        <div id="arena-memory" style="display: none;">
+          <div id="test-intro-mem">
+            <h3 data-i18n="mem-how-title">Hafıza Eşleştirme Kartları</h3>
+            <p style="margin: 20px 0; color: #607d8b;" data-i18n="mem-how-desc">Kartları ters çevirerek eşlerini bulmaya çalışın. Dağınıklık durumunuzu ölçer.</p>
+            <button class="main-btn" onclick="startMemoryTest()" data-i18n="btn-start-test">Teste Başla</button>
+          </div>
+          <div id="test-active-mem" style="display: none;">
+            <div class="memory-game-board" id="memory-board"></div>
+            <p id="test-timer-mem" style="margin-top: 25px; font-weight: bold;"><span data-i18n="test-moves">Hamle Sayısı</span>: <span id="mem-moves-count">0</span></p>
+          </div>
+        </div>
+
+        <div id="arena-stroop" style="display: none;">
+          <div id="test-intro-stroop">
+            <h3 data-i18n="stroop-how-title">Renk Çatışma Testi</h3>
+            <p style="margin: 20px 0; color: #607d8b;" data-i18n="stroop-how-desc">Aşağıdaki kelimenin ne okunduğunu DEĞİL, yazıldığı YAZI RENGİNİ seçin!</p>
+            <button class="main-btn" onclick="startStroopTest()" data-i18n="btn-start-test">Teste Başla</button>
+          </div>
+          <div id="test-active-stroop" style="display: none;">
+            <div id="stroop-word-box">YÜKLENİYOR</div>
+            <div id="stroop-options-container"></div>
+            <p id="test-timer-stroop" style="margin-top: 25px; font-weight: bold;"><span data-i18n="test-time-left">Kalan Süre</span>: 30s</p>
+          </div>
+        </div>
+
+        <div id="arena-text" style="display: none;">
+          <div id="test-intro-text">
+            <h3 data-i18n="text-how-title">Metin Odaklanma Testi</h3>
+            <p style="margin: 20px 0; color: #607d8b;" data-i18n="text-how-desc-pwa">Günün farkındalık metini süre bitene kadar dikkatlice okuyun, ardından sökülen kelimeleri doğru yerleştirin.</p>
+            <button class="main-btn" onclick="startTextFocusTest()" data-i18n="btn-start-test">Teste Başla</button>
+          </div>
+          <div id="test-active-text" style="display: none;">
+            <p id="text-timer-display" style="font-weight: bold; color: #355c7d; font-size: 1.1rem; margin-bottom: 15px;"></p>
+            <div id="text-paragraph-display"></div>
+            <button id="text-submit-btn" class="main-btn" style="margin: 25px auto 0; max-width: 250px; display: block;" onclick="submitTextTestAnswer()" data-i18n="btn-save">Kaydet</button>
+          </div>
+        </div>
+
+        <div id="test-global-result" style="display: none;">
+          <h3 data-i18n="test-finished">Test Tamamlandı!</h3>
+          <p style="margin: 15px 0;" id="global-score-text"></p>
+          <button class="nav-btn" onclick="restartCurrentTest()" data-i18n="btn-retry">Yeniden Dene</button>
+          <button class="main-btn" onclick="showSection('home')" data-i18n="nav-home">Ana Sayfa</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="fun-zone" class="section">
+      <h1 data-i18n="fun-title">Zihinsel Mola Odası</h1>
+      <p class="subtitle" data-i18n="fun-subtitle">Ruh halini yükseltecek, kafanı tamamen dağıtacak puansız ve tasasız eğlence oyunları.</p>
+      
+      <div class="card-grid" id="fun-menu-grid">
+        <div class="card test-select-card" onclick="selectGame('snake')">
+          <div class="test-card-icon">🐍</div>
+          <h3 data-i18n="game-snake-title">Retro Snake</h3>
+          <p data-i18n="game-snake-desc">Yemleri toplayarak yılanı büyüt, anlık dikkatini tamamen oyuna ver.</p>
+        </div>
+        <div class="card test-select-card" onclick="selectGame('bubble')">
+          <div class="test-card-icon">🫧</div>
+          <h3 data-i18n="game-bubble-title">Bubble Pop</h3>
+          <p data-i18n="game-bubble-desc">Aynı renkteki balonları küme halinde patlat, biriken stresi deşarj et.</p>
+        </div>
+      </div>
+
+      <div class="card" id="game-arena-card" style="display: none; text-align: center; padding: 30px 15px; margin-top: 25px;">
+        <button class="nav-btn" style="float: left; margin-bottom: 20px;" onclick="backToFunMenu()">⬅ Oyun Odasına Dön</button>
+        <div style="clear: both;"></div>
+
+        <div id="arena-snake" style="display: none;">
+          <div style="margin-bottom: 15px; font-weight: bold; color: #355c7d;">Skor: <span id="snake-score-display">0</span></div>
+          <canvas id="snake-canvas" width="400" height="400" style="background: #1e293b; border-radius: 16px; box-shadow: inset 0 4px 10px rgba(0,0,0,0.3); display: block; margin: 0 auto;"></canvas>
+          <p style="margin-top: 15px; font-size: 0.85rem; color: #607d8b;">Klavye yön tuşlarını veya bilgisayar faresini sürükleyerek yönlendirin.</p>
+        </div>
+
+        <div id="arena-bubble" style="display: none;">
+          <div style="margin-bottom: 15px; font-weight: bold; color: #355c7d;">Patlatılan Balon: <span id="bubble-score-display">0</span></div>
+          <div class="memory-game-board" id="bubble-board" style="grid-template-columns: repeat(5, 65px); max-width: 360px; gap: 10px;"></div>
+          <p style="margin-top: 15px; font-size: 0.85rem; color: #607d8b;">Aynı renkteki balon kümelerine tıklayarak zincirleme patlamalar yaratın!</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="results" class="section">
+      <h1 data-i18n="results-title">Performans Analizi</h1>
+      <p class="subtitle" data-i18n="results-subtitle">Zihinsel verilerinin test sonuçlarına etkisini gör.</p>
+      <div class="card-grid">
+        <div class="card">
+          <h3 data-i18n="analysis-summary-title">Genel Özet</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+            <div style="background: #f6f9fc; padding: 15px; border-radius: 15px; text-align: center;">
+              <span id="res-total-tests" style="font-size: 1.5rem; font-weight: bold; color: #4a7fa7;">0</span>
+              <span style="font-size: 0.8rem; color: #607d8b; display: block;" data-i18n="stat-total-tests">Toplam Test</span>
+            </div>
+            <div style="background: #f6f9fc; padding: 15px; border-radius: 15px; text-align: center;">
+              <span id="res-best-score" style="font-size: 1.5rem; font-weight: bold; color: #27ae60;">0</span>
+              <span style="font-size: 0.8rem; color: #607d8b; display: block;" data-i18n="stat-best-score">En İyi Skor</span>
+            </div>
+          </div>
+          <p style="margin-top: 20px; font-size: 0.9rem;"><span data-i18n="stat-avg-accuracy">Ortalama Başarı</span>: <strong id="res-avg-accuracy">%0</strong></p>
+        </div>
+        <div class="card">
+          <h3 data-i18n="analysis-impact-title">Zihinsel Etki Analizi</h3>
+          <p id="res-correlation-text" style="font-style: italic; margin-top: 10px; color: #4a6f91;" data-i18n="analysis-no-data">Analiz için veri girip test çözmelisin.</p>
+          <div id="insight-box" style="margin-top: 15px; background: #fffbeb; padding: 15px; border-radius: 14px; display: none;">
+            <p style="font-size: 0.85rem; color: #92400e;">💡 <strong data-i18n="analysis-suggestion">Öneri</strong>: <span id="insight-text"></span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="journal" class="section">
+      <h1 data-i18n="journal-title">Günlüğüm</h1>
+      <p class="subtitle" data-i18n="journal-subtitle">Bugün nasıl hissediyorsun?</p>
+      <div class="card">
+        <textarea id="journal-input" rows="8"></textarea>
+        <button class="main-btn" onclick="saveJournal()" data-i18n="btn-save">Kaydet</button>
+        <div id="journal-history" style="margin-top: 20px;"></div>
+      </div>
+    </section>
+
+    <section id="profile" class="section">
+      <h1>Profil Paneli</h1>
+      <p class="subtitle" data-i18n="profile-subtitle">Zihinsel yolculuğunu yönet ve ilerlemeni takip et.</p>
+      <div class="card-grid">
+        <div class="card profile-main-card">
+          <div class="avatar-circle" id="profile-avatar-circle"><span id="avatar-letter">?</span></div>
+          <h3 id="profile-display-name">Misafir</h3>
+          <p id="profile-display-email" style="font-size: 0.85rem; color: #8fa6b8;" data-i18n="profile-no-email">E-posta girilmedi</p>
+          <div class="form-group"><input type="text" id="user-name-input"></div>
+          <div class="form-group"><input type="email" id="user-email-input"></div>
+          <div class="form-group">
+            <label data-i18n="profile-theme-label">Profil Teman</label>
+            <div class="color-palette" id="color-palette">
+              <div class="color-swatch selected" data-color="linear-gradient(135deg, #dbeef7, #c5e3f1)" style="background: #c5e3f1;"></div>
+              <div class="color-swatch" data-color="linear-gradient(135deg, #fcdada, #f8b4b4)" style="background: #f8b4b4;"></div>
+              <div class="color-swatch" data-color="linear-gradient(135deg, #d4f0db, #a8e0b6)" style="background: #a8e0b6;"></div>
+              <div class="color-swatch" data-color="linear-gradient(135deg, #f9d89c, #f7b267)" style="background: #f9d89c;"></div>
+              <div class="color-swatch" data-color="linear-gradient(135deg, #eaddf6, #d0b3e8)" style="background: #eaddf6;"></div>
+            </div>
+          </div>
+          <button class="main-btn" style="width: 100%;" onclick="saveUserProfile()" data-i18n="btn-update-profile">Bilgileri Güncelle</button>
+        </div>
+        <div class="card">
+          <h3 data-i18n="profile-stats-title">İstatistikler</h3>
+          <div class="profile-stats-subgrid">
+            <div class="stat-box">🔥 <span id="profile-streak">0 Gün</span></div>
+            <div class="stat-box">📝 <span id="profile-journal-count">0 Not</span></div>
+          </div>
+          <button class="nav-btn" style="margin-top: 30px; background: #fee2e2; color: #991b1b; width: 100%;" onclick="resetAllData()" data-i18n="btn-reset-system">Sistemi Sıfırla</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="daily-modal" class="modal">
+    <div class="modal-content">
+      <h2 data-i18n="modal-title">Durum Analizi</h2>
+      <div style="text-align: left; margin: 15px 0; background: #f6f9fc; padding: 15px; border-radius: 12px;">
+        <label data-i18n="modal-stress-label">Stres (1-5)</label>
+        <input type="range" id="stress-slider" min="1" max="5" value="3" oninput="document.getElementById('stress-display').innerText = this.value">
+        <p><span data-i18n="modal-choice">Seçim</span>: <strong id="stress-display">3</strong></p>
+      </div>
+      <div style="text-align: left; margin: 15px 0; background: #f6f9fc; padding: 15px; border-radius: 12px;">
+        <label data-i18n="modal-sleep-label">Uyku (Saat)</label>
+        <input type="number" id="sleep-hours" min="0" max="14" value="7">
+      </div>
+      <div style="text-align: left; margin: 15px 0; background: #f6f9fc; padding: 15px; border-radius: 12px;">
+        <label data-i18n="modal-quality-label">Kalite</label>
+        <select id="sleep-quality">
+          <option value="1" data-i18n="modal-quality-bad">Kötü</option>
+          <option value="2" selected data-i18n="modal-quality-normal">Normal</option>
+          <option value="3" data-i18n="modal-quality-good">Çok İyi</option>
+        </select>
+      </div>
+      <button class="main-btn" style="width: 100%;" onclick="saveDailyStatus()" data-i18n="btn-analyze">Analiz Et</button>
+      <button class="nav-btn" style="width: 100%; margin-top: 10px;" onclick="closeDailyModal()" data-i18n="btn-close">Kapat</button>
+    </div>
+  </div>
+
+  <div id="umiora-butterfly" class="butterfly-container">
+    <svg id="butterfly-svg" width="130" height="130" viewBox="0 0 200 200">
+      <defs>
+        <linearGradient id="wing-fill" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stop-color="#e2e8f0" />
+        </linearGradient>
+      </defs>
+      <g id="butterfly-wings">
+        <path class="wing upper-left" d="M100,100 C70,30 20,40 40,90 C50,110 100,100 100,100" fill="url(#wing-fill)" stroke="#355c7d" stroke-width="1.5" stroke-opacity="0.3" />
+        <path class="wing lower-left" d="M100,100 C70,130 30,140 60,180 C80,190 100,150 100,100" fill="url(#wing-fill)" stroke="#355c7d" stroke-width="1.5" stroke-opacity="0.3" />
+        <path class="wing upper-right" d="M100,100 C130,30 180,40 160,90 C150,110 100,100 100,100" fill="url(#wing-fill)" stroke="#355c7d" stroke-width="1.5" stroke-opacity="0.3" />
+        <path class="wing lower-right" d="M100,100 C130,130 170,140 140,180 C120,190 100,150 100,100" fill="url(#wing-fill)" stroke="#355c7d" stroke-width="1.5" stroke-opacity="0.3" />
+      </g>
+      <path d="M100,100 L100,140" stroke="#355c7d" stroke-width="3" stroke-linecap="round" />
+      <circle cx="100" cy="100" r="4" fill="#355c7d" />
+      <path d="M98,98 Q95,85 85,88 M102,98 Q105,85 115,88" stroke="#355c7d" stroke-width="1.5" fill="none" />
+    </svg>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
