@@ -235,14 +235,15 @@ function toggleTrack(trackName, element) {
     }
 }
 
-// ---------------- DINAMIK I18N DİL DEĞİŞTİRME MOTORU ----------------
+// ---------------- DINAMIK I18N DİL DEĞİŞTİRME MOTORU (data-i18n DÜZELTİLDİ) ----------------
 function changeLanguage(lang) {
     if (!translations[lang]) return;
     currentLang = lang;
     localStorage.setItem('umiora_lang', lang);
 
-    document.querySelectorAll('[data-translate]').forEach(element => {
-        const key = element.getAttribute('data-translate');
+    // HTML dosyasındaki data-i18n etiketleriyle eşleşecek şekilde düzeltildi
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
         if (translations[lang][key]) {
             if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
                 element.setAttribute('placeholder', translations[lang][key]);
@@ -453,12 +454,15 @@ function startAttentionTest() {
     document.getElementById('test-intro-ax').style.display = 'none';
     document.getElementById('test-active-ax').style.display = 'block';
     timeLeft = 30; hits = 0; wrongs = 0;
-    document.getElementById('ax-time-left').innerText = timeLeft;
+    
+    // HTML'deki kimlikle (test-timer-ax) asenkron eşleşecek şekilde set edildi
+    const timerElement = document.getElementById('test-timer-ax');
+    if (timerElement) timerElement.innerHTML = `<span data-i18n="test-time-left">${translations[currentLang]["test-time-left"]}</span>: ${timeLeft}s`;
     
     clearInterval(testInt); clearInterval(letterInt);
     testInt = setInterval(() => { 
         timeLeft--; 
-        document.getElementById('ax-time-left').innerText = timeLeft;
+        if (timerElement) timerElement.innerHTML = `<span data-i18n="test-time-left">${translations[currentLang]["test-time-left"]}</span>: ${timeLeft}s`;
         if (timeLeft <= 0) endGlobalTest('ax-cpt'); 
     }, 1000);
     
@@ -472,7 +476,6 @@ function showNextLetter() {
     if (!letterBox) return;
 
     let lastLetter = currentLetter;
-    // AX çifti ihtimalini simüle etme
     if (lastLetter === 'X' && Math.random() > 0.3) {
         currentLetter = 'A';
     } else {
@@ -481,12 +484,11 @@ function showNextLetter() {
 
     letterBox.innerText = currentLetter;
     letterBox.style.color = '#1e293b';
-    startTime = window.performance.now(); // Mikrosaniye hassasiyetli zamanlama başlangıcı
+    startTime = window.performance.now();
 }
 
-function handleAxReaction() {
-    const lastLetter = document.getElementById('letter-box').innerText;
-    // Eğer ekrandaki harf A ise ve bir önceki harf X ise (AX Koşulu) doğru kabul edilir
+// HTML'deki handleReaction() çağrısıyla eşleşmesi için fonksiyon senkronize edildi
+function handleReaction() {
     if (currentLetter === 'A') {
         hits++;
         document.getElementById('letter-box').style.color = '#2ecc71';
@@ -506,8 +508,6 @@ function startMemoryTest() {
     document.getElementById('test-intro-mem').style.display = 'none';
     document.getElementById('test-active-mem').style.display = 'block';
     initBubblePopGame();
-    
-    // Hafıza oyununun bittiğini simüle etmek için 15 saniye sonra sonlandırma
     setTimeout(() => { endGlobalTest('memory'); }, 15000);
 }
 function resetMemoryScreen() { document.getElementById('test-intro-mem').style.display = 'block'; document.getElementById('test-active-mem').style.display = 'none'; }
@@ -524,7 +524,7 @@ function startStroopTest() {
 }
 
 function nextStroopQuestion() {
-    const wordEl = document.getElementById('stroop-word');
+    const wordEl = document.getElementById('stroop-word-box'); // HTML ID'siyle senkronize edildi
     if (!wordEl) return;
     
     const randomWordKey = stroopColors[Math.floor(Math.random() * stroopColors.length)];
@@ -536,7 +536,7 @@ function nextStroopQuestion() {
 }
 
 function handleStroopAnswer(chosenColor) {
-    const correctColor = document.getElementById('stroop-word').dataset.correctColor;
+    const correctColor = document.getElementById('stroop-word-box').dataset.correctColor;
     if (chosenColor === correctColor) {
         stroopHits++;
     } else {
@@ -644,11 +644,10 @@ function saveDailyStatus() {
     const hours = parseInt(document.getElementById('sleep-hours').value) || 0;
     const qual = parseInt(document.getElementById('sleep-quality').value);
 
-    // Psikolojik renk teorisine dayalı aura boyama motoru
-    let dayColor = "#95a5a6"; // Nötr/Varsayılan gri
-    if (stress <= 2 && hours >= 7) dayColor = "#2ecc71"; // Dinginlik ve Şifa = Yeşil
-    else if (stress <= 2 && hours < 7) dayColor = "#3498db"; // Yüksek Odak / Akış = Canlı Mavi
-    else if (stress >= 4) dayColor = "#e67e22"; // Yüksek Stres / Kaos = Turuncu/Kırmızı
+    let dayColor = "#95a5a6"; 
+    if (stress <= 2 && hours >= 7) dayColor = "#2ecc71"; // Yeşil
+    else if (stress <= 2 && hours < 7) dayColor = "#3498db"; // Mavi
+    else if (stress >= 4) dayColor = "#e67e22"; // Turuncu
 
     let score = Math.round(((6 - stress) * 20 + qual * 33) / 2);
     let weekly = JSON.parse(localStorage.getItem('umiora_weekly')) || [];
@@ -666,7 +665,7 @@ function saveDailyStatus() {
 
 function renderButterflyLayers(weekly) {
     const grad = document.getElementById("wing-fill");
-    const butterflySvg = document.getElementById("butterfly-svg"); // Kelebeğin ana kapsayıcısı
+    const butterflySvg = document.getElementById("butterfly-svg");
     if (!grad) return;
     grad.innerHTML = ""; 
     let stops = [];
@@ -675,7 +674,6 @@ function renderButterflyLayers(weekly) {
         stops.push('<stop offset="0%" stop-color="#e2e8f0" />');
         stops.push('<stop offset="100%" stop-color="#e2e8f0" />');
     } else {
-        // Renk geçişlerini dinamik olarak SVG katmanlarına enjekte etme
         weekly.forEach((day, index) => {
             let offsetPercentage = Math.round((index / Math.max(weekly.length - 1, 1)) * 100);
             stops.push(`<stop offset="${offsetPercentage}%" stop-color="${day.color}" />`);
@@ -687,10 +685,8 @@ function renderButterflyLayers(weekly) {
     }
     grad.innerHTML = stops.join("");
 
-    // --- 7. GÜN FINAL METAMORFOZU (GROWTH VE FLAPPING ANIMASYONU) ---
     if (weekly.length >= 7 && butterflySvg) {
         butterflySvg.classList.add('final-metamorphosis-active');
-        // CSS dosyasındaki devasa büyüme ve kanat çırpma sınıflarını programatik tetikler
         butterflySvg.style.transform = "scale(2.5) translate(-50%, -50%)";
         butterflySvg.style.position = "fixed";
         butterflySvg.style.top = "50%";
@@ -726,6 +722,7 @@ function saveJournal() {
     loadJournals();
 }
 
+// HTML'deki map yapısıyla asenkron uyumlu hale getirildi
 function loadJournals() {
     const hist = document.getElementById('journal-history');
     let data = JSON.parse(localStorage.getItem('umiora_journal')) || [];
@@ -758,7 +755,7 @@ window.onload = function () {
 
 // ---------------- PWA SERVİS İŞÇİSİ KAYIT MOTORU ----------------
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js') // Dağıtım için bağıl yol './' olarak mühürlendi
-        .then(() => console.log("PWA Aktif! Bulut ve önbellek Proxy katmanı kararlı."))
-        .catch((err) => console.log("PWA Hatası. Manifest veya sw.js konumunu denetleyin:", err));
+    navigator.serviceWorker.register('./sw.js')
+        .then(() => console.log("PWA Aktif!"))
+        .catch((err) => console.log("PWA Hatası:", err));
 }
